@@ -1,0 +1,14 @@
+dist/
+node_modules/
+npm-debug.log*
+
+.idea/
+jsconfig.json
+.vscode/
+
+typings/
+
+tmp/
+
+**/.DS_Store
+.DS_Store
