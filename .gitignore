@@ -6,6 +6,9 @@ npm-debug.log*
 jsconfig.json
 .vscode/
 
+*.swp
+*.swo
+
 typings/
 
 tmp/
