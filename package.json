@@ -1,0 +1,15 @@
+{
+  "name": "ngae",
+  "version": "1.0.0",
+  "description": "CLI to create and deploy Angular apps on Appengine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "angular",
+    "appengine"
+  ],
+  "author": "Rhett Robinson <rrhett@gmail.com>",
+  "license": "ISC"
+}
