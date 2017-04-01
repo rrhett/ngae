@@ -11,5 +11,8 @@
     "appengine"
   ],
   "author": "Rhett Robinson <rrhett@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "bin": {
+    "ngae": "./index.js"
+  }
 }
