@@ -13,6 +13,11 @@
   "author": "Rhett Robinson <rrhett@gmail.com>",
   "license": "ISC",
   "bin": {
-    "ngae": "./index.js"
+    "ngae": "./index.js",
+    "ngae-compile": "./compile.js",
+    "ngae-run": "./run.js"
+  },
+  "dependencies": {
+    "commander": "^2.9.0"
   }
 }
