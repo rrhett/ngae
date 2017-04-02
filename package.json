@@ -1,6 +1,6 @@
 {
   "name": "ngae",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI to create and deploy Angular apps on Appengine",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "ngae": "./index.js",
     "ngae-clean": "./clean.js",
     "ngae-compile": "./compile.js",
-    "ngae-publish": "./publish.js",
+    "ngae-deploy": "./deploy.js",
     "ngae-run": "./run.js"
   },
   "dependencies": {
