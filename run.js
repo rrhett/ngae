@@ -27,7 +27,7 @@ if (require.main == module) {
   const program = require('commander');
 
   program.arguments('')
-      .option('-c, --config [file]', 'Configuration file')
+      .option('-c, --config [file]', 'Configuration file', 'ngae.conf.json')
       .option('--compile', 'Compile first')
       .action(() => { });
   program.parse(process.argv);

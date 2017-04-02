@@ -72,7 +72,7 @@ if (require.main == module) {
   const program = require('commander');
 
   program.arguments('')
-      .option('-c, --config [file]', 'Configuration file')
+      .option('-c, --config [file]', 'Configuration file', 'ngae.conf.json')
       .action(() => { });
   program.parse(process.argv);
 
