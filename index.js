@@ -6,6 +6,8 @@ const program = require('commander');
 
 program
     .version(pkg.version)
+    .command('clean', 'Cleans up generated content')
     .command('compile', 'Does a production build of the client')
+    .command('publish', 'Publishes to appengine')
     .command('run', 'Runs the dev appengine server')
     .parse(process.argv);

@@ -14,10 +14,13 @@
   "license": "ISC",
   "bin": {
     "ngae": "./index.js",
+    "ngae-clean": "./clean.js",
     "ngae-compile": "./compile.js",
+    "ngae-publish": "./publish.js",
     "ngae-run": "./run.js"
   },
   "dependencies": {
+    "chalk": "^1.1.3",
     "commander": "^2.9.0"
   }
 }
