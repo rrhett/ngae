@@ -17,7 +17,9 @@ const publish = (dir, projectId) => {
   // Or allow a prefix or something, so e.g. it looks for ngae-version?
   // For this we verify we have only one tag.
   // Also, appengine requires that the version:
-  // - matches [a-z][a-z0-9-]*
+  // - matches [a-z0-9-]* (we'll impose starts with [a-z] for best practices so
+  //   it doesn't conflict with possibly accessing an instance, per their
+  //   recommendations)
   // - doesn't start with ah-
   // - isn't default or latest
   // And for safety we'll further impose:
