@@ -111,7 +111,7 @@ Additionally, to setup and run ngae, you can add commands to your scripts:
     "ngae": "ngae",
     "compile": "ngae compile",
     "run": "ngae run",
-    "publish": "ngae publish"
+    "deploy": "ngae deploy"
   }
 }
 ```
@@ -135,7 +135,7 @@ show the latest code. This is good for testing before finally deploying, as this
 is the same JavaScript your Appengine app will serve (compiled down, rather than
 served dynamically).
 
-### `npm publish`
+### `npm deploy`
 
 This will compile the JavaScript and deploy your app to Appengine. Before doing
 this, you MUST `git tag` your commit. You MUST have a single tag on this commit,
@@ -146,4 +146,4 @@ and it MUST:
 * Match `/^[a-z][a-z0-9-]*$/` as a regular expression (start with a lower case
   letter and contain only lower case letters, numbers and hyphens).
 
-This will publish to Appengine with a new version name that matches the git tag.
+This will deploy to Appengine with a new version name that matches the git tag.

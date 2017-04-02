@@ -5,10 +5,10 @@ const execSync = require('child_process').execSync;
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
 
-const publish = (dir, projectId) => {
+const deploy = (dir, projectId) => {
   require('./compile').compile(dir);
 
-  const step = require('./status.js').status('Publishing');
+  const step = require('./status.js').status('Deploying');
 
   const tag = spawnSync('git', ['tag', '-l', '--contains']).stdout.toString().trim();
 
@@ -50,7 +50,7 @@ const publish = (dir, projectId) => {
   }
 
   // Note: gcloud app deploy will additionally prompt.
-  console.log(`About to publish version ${tag}.`);
+  console.log(`About to deploy version ${tag}.`);
   try {
     // stdio: [0, 1, 2] uses this process' stdio, effectively running this
     // script inline.
@@ -63,7 +63,7 @@ const publish = (dir, projectId) => {
   }
 };
 
-exports.publish = publish;
+exports.deploy = deploy;
 
 if (require.main == module) {
   const program = require('commander');
@@ -74,5 +74,5 @@ if (require.main == module) {
   program.parse(process.argv);
 
   const config = require('./config.js').config(program.config);
-  publish(config.dir, config.projectId);
+  deploy(config.dir, config.projectId);
 }
