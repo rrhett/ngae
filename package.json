@@ -1,6 +1,6 @@
 {
   "name": "ngae",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "CLI to create and deploy Angular apps on Appengine",
   "main": "index.js",
   "scripts": {
