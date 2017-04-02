@@ -13,7 +13,7 @@ const publish = (dir, projectId) => {
   const tag = spawnSync('git', ['tag', '-l', '--contains']).stdout.toString().trim();
 
   // We generate a version based on the git tag of the commit.
-  // TODO: maybe allow a version to be passed in and it to git tag?
+  // TODO: maybe allow a version to be passed in and use it to git tag?
   // Or allow a prefix or something, so e.g. it looks for ngae-version?
   // For this we verify we have only one tag.
   // Also, appengine requires that the version:
