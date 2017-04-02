@@ -120,7 +120,7 @@ Additionally, to setup and run ngae, you can add commands to your scripts:
 
 Now that you have setup your project, here's what each command does:
 
-### `npm run`
+### `npm run run`
 
 This compiles your Angular app and starts the Appengine development server. If
 your app requires authentication, you will need to go to http://localhost:8080
@@ -128,14 +128,14 @@ at least once to authenticate on your Appengine environment. When visiting
 Appengine directly, it will serve the last version of your Angular app you
 compiled.
 
-### `npm compile`
+### `npm run compile`
 
 This will recompile the Angular app so directly visiting your Appengine app will
 show the latest code. This is good for testing before finally deploying, as this
 is the same JavaScript your Appengine app will serve (compiled down, rather than
 served dynamically).
 
-### `npm deploy`
+### `npm run deploy`
 
 This will compile the JavaScript and deploy your app to Appengine. Before doing
 this, you MUST `git tag` your commit. You MUST have a single tag on this commit,
