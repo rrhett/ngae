@@ -2,6 +2,7 @@
 'use strict';
 
 const chalk = require('chalk');
+const execSync = require('child_process').execSync;
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
 
@@ -51,26 +52,18 @@ const publish = (dir, projectId) => {
     err(`gcloud app versions exited with error; make sure ${tag} isn't an existing version`);
   }
 
-  const readline = require('readline');
-  const rl = readline.createInterface(process.stdin, process.stdout);
-  rl.setPrompt(`About to publish version ${tag}. Okay? [Yn]`);
-  rl.prompt();
-  rl.on('line', (line) => {
-    if (/^(|y|yes)$/i.test(line.trim())) {
-      // Push
-      const push = spawnSync(
-          'gcloud',
-          ['app', 'deploy', '--version', tag, '--project', projectId]);
-      if (push.status !== 0) {
-        step.error('Push failed: ' + push.stdout.toString());
-      } else {
-        step.done();
-      }
-    } else {
-      step.error('Push aborted');
-    }
-    rl.close();
-  });
+  // Note: gcloud app deploy will additionally prompt.
+  console.log(`About to publish version ${tag}.`);
+  try {
+    // stdio: [0, 1, 2] uses this process' stdio, effectively running this
+    // script inline.
+    execSync(
+        `gcloud app deploy --version ${tag} --project ${projectId}`,
+        {cwd: dir, stdio: [0, 1, 2]});
+    step.done();
+  } catch (e) {
+    step.error('');
+  }
 };
 
 exports.publish = publish;
