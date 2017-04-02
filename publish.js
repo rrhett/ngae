@@ -1,15 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-const chalk = require('chalk');
 const execSync = require('child_process').execSync;
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
-
-const err = (msg) => {
-  console.error(chalk.red(msg));
-  process.exit(1);
-};
 
 const publish = (dir, projectId) => {
   require('./compile').compile(dir);
@@ -29,17 +23,17 @@ const publish = (dir, projectId) => {
   // And for safety we'll further impose:
   // - isn't in use by the app already
   if (tag.includes('\n') || tag.length == 0) {
-    err('The current commit must contain exactly one tag');
+    step.error('The current commit must contain exactly one tag');
   }
   if (tag.startsWith('ah-')) {
-    err('Tag cannot start with ah-');
+    step.error('Tag cannot start with ah-');
   }
   if (tag === 'default' || tag === 'latest') {
-    err(`The label ${tag} is reserved.`);
+    step.error(`The label ${tag} is reserved.`);
   }
   const requiredRegex = /^[a-z][a-z0-9-]*$/;
   if (!requiredRegex.test(tag)) {
-    err(`${tag} must match ${requiredRegex}`);
+    step.error(`${tag} must match ${requiredRegex}`);
   }
 
   const versions = spawnSync('gcloud',
@@ -49,7 +43,8 @@ const publish = (dir, projectId) => {
   // the given version. We don't want to accidentally overwrite the app version,
   // so abort here.
   if (versions.status === 0) {
-    err(`gcloud app versions exited with error; make sure ${tag} isn't an existing version`);
+    step.error(
+        `gcloud app versions exited with error; make sure ${tag} isn't an existing version`);
   }
 
   // Note: gcloud app deploy will additionally prompt.

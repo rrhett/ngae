@@ -10,7 +10,7 @@ exports.status = (step) => {
       console.log(chalk.green(step + ' DONE'));
     },
     error: (msg) => {
-      console.error(msg);
+      console.error(chalk.red(msg));
       console.error(chalk.red(step + ' FAILED'));
       process.exit(1);
     }
