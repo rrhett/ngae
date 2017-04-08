@@ -10,6 +10,13 @@
     "angular",
     "appengine"
   ],
+  "bugs": {
+    "url": "https://github.com/rrhett/ngae/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rrhett/ngae.git"
+  },
   "author": "Rhett Robinson <rrhett@gmail.com>",
   "license": "ISC",
   "bin": {
