@@ -30,6 +30,14 @@ and issuing the commands.
 This guide assumes you have created a project using `ng new` using
 @angular/angular-cli.
 
+A typical package structure for using this utility may be:
+
+```sh
+/ - root of repository
+/client - root of angular application
+/appengine - root of appengine application
+```
+
 ### ngae.conf.json
 
 `ngae` assumes the presence of a configuration file, by default located next to
@@ -40,6 +48,15 @@ You need to specify two items in this configuration file:
 
 * `dir`: The relative path to your appengine server code.
 * `projectId`: Your Google Cloud project id.
+
+Example:
+
+```json
+{
+  "dir": "../appengine",
+  "projectId": "myAppengineApp"
+}
+```
 
 ### Appengine server code
 
@@ -119,6 +136,8 @@ Additionally, to setup and run ngae, you can add commands to your scripts:
 ## Commands
 
 Now that you have setup your project, here's what each command does:
+
+Note: these should all be run from the directory you Angular app is in.
 
 ### `npm run run`
 
