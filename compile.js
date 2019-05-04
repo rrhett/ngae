@@ -9,8 +9,10 @@ const compile = (dir) => {
 
   const step = require('./status.js').status('Compiling');
 
-  // TODO: figure out how to get this logging to print, do I need spawn?
-  spawnSync('ng', ['build', '--prod', '-d', '/gc']);
+  const compileStep = spawnSync('ng', ['build', '--prod', '--deployUrl', '/gc']);
+  if (compileStep.status !== 0) {
+    step.error(compileStep.stderr.toString('utf8'));
+  }
 
   const genFilesDir = path.join(dir, 'genfiles');
   const genContentDir = path.join(dir, 'generated_content');
