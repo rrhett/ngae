@@ -9,7 +9,7 @@ const compile = (dir) => {
 
   const step = require('./status.js').status('Compiling');
 
-  const compileStep = spawnSync('ng', ['build', '--prod', '--deployUrl', '/gc']);
+  const compileStep = spawnSync('ng', ['build', '--prod', '--deployUrl', '/gc/']);
   if (compileStep.status !== 0) {
     step.error(compileStep.stderr.toString('utf8'));
   }
