@@ -1,9 +1,12 @@
 # ngae
 
 `ngae` is a command line utility that makes it easier to deploy an Angular app
-on Google Appengine.
+on Google Appengine or Firebase using npm scripts.
 
 It is written to be used with @angular/angular-cli.
+
+Originally `ng` refered to the Angular CLI tool, and `ae` referred to Appengine.
+As `ngae` now supports Firebase, `ae` is a legacy part of the name.
 
 # Prerequisites
 
@@ -13,6 +16,10 @@ but for now, they are here):
 * Your app uses @angular/angular-cli
 * You use git to manage your repository
 * You will only have a single tag for each released version to Appengine
+* .. or you deploy using Firebase
+
+Currently this app does not support Firebase deploy alongside Appengine, but it
+wouldn't be hard to (e.g. for custom logic in the Appengine)
 
 # Installation
 
@@ -35,14 +42,35 @@ A typical package structure for using this utility may be:
 ```sh
 / - root of repository
 /client - root of angular application
-/appengine - root of appengine application
+/client/firebase.json - configuration for serving to firebase, if applicable
+/client/ngae.conf.json - configuration for serving to Appengine, if applicable
+/appengine - root of appengine application, if deploying appengine
 ```
 
-### ngae.conf.json
+### Configuration
 
-`ngae` assumes the presence of a configuration file, by default located next to
-`package.json` in `ngae.conf.json` (commands should allow this filename to be
-overridden with `-c` or `--config`).
+#### Firebase
+
+`ngae` detects a firebase deployment by the presence of a firebase.json file
+which a 'hosting' section. If using firebase, the hosting must be configured to
+serve from `dist`:
+
+```json
+{
+  "hosting": {
+    "public": "dist"
+  }
+}
+```
+
+If using firebase, `ngae` assumes there is also a `.firebaserc` file that will
+configure the default project.
+
+#### Appengine
+
+If serving using Appengine, `ngae` assumes the presence of a configuration file,
+by default located next to `package.json` in `ngae.conf.json` (commands should
+allow this filename to be overridden with `-c` or `--config`).
 
 You need to specify two items in this configuration file:
 
@@ -59,6 +87,8 @@ Example:
 ```
 
 ### Appengine server code
+
+This section is only applicable if serving using Appengine.
 
 The code assumes your `app.yaml` file has the following setup:
 
@@ -91,6 +121,8 @@ class Handler(webapp2.RequestHandler):
 
 #### Proxy
 
+This section is only applicable if using Appengine.
+
 Finally, to ease maintenance of development and production, you may find it
 easiest to run your Angular app with a proxy to your Appengine app. To do this,
 create a `proxy.conf.json` file similar to:
@@ -120,6 +152,8 @@ proxy:
 }
 ```
 
+## Configuring npm.
+
 Additionally, to setup and run ngae, you can add commands to your scripts:
 
 ```json
@@ -137,28 +171,28 @@ Additionally, to setup and run ngae, you can add commands to your scripts:
 
 Now that you have setup your project, here's what each command does:
 
-Note: these should all be run from the directory you Angular app is in.
+Note: these should all be run from the directory your Angular app is in.
 
 ### `npm run run`
 
-This compiles your Angular app and starts the Appengine development server. If
-your app requires authentication, you will need to go to http://localhost:8080
-at least once to authenticate on your Appengine environment. When visiting
-Appengine directly, it will serve the last version of your Angular app you
-compiled.
+This compiles your Angular app and either starts the Appengine development
+server or serves the Firebase project locally. If your Appengine app requires
+authentication, you will need to go to http://localhost:8080 at least once to
+authenticate on your Appengine environment. When visiting Appengine or Firebase
+directly, it will serve the last version of your Angular app you compiled.
 
 ### `npm run compile`
 
-This will recompile the Angular app so directly visiting your Appengine app will
-show the latest code. This is good for testing before finally deploying, as this
-is the same JavaScript your Appengine app will serve (compiled down, rather than
-served dynamically).
+This will recompile the Angular app so directly visiting your Appengine app or
+Firebase locally served app will show the latest code. This is good for testing
+before finally deploying, as this is the same JavaScript your Appengine app or
+Firebase deployment will serve (compiled down, rather than served dynamically).
 
 ### `npm run deploy`
 
-This will compile the JavaScript and deploy your app to Appengine. Before doing
-this, you MUST `git tag` your commit. You MUST have a single tag on this commit,
-and it MUST:
+This will compile the JavaScript and deploy your app to Appengine or Firebase.
+Before doing this, if deploying to Appengine, you MUST `git tag` your commit.
+You MUST have a single tag on this commit, and it MUST:
 
 * Not start with ah-
 * Not be 'default' or 'latest'
@@ -166,3 +200,6 @@ and it MUST:
   letter and contain only lower case letters, numbers and hyphens).
 
 This will deploy to Appengine with a new version name that matches the git tag.
+
+Firebase deployments will deploy with a message indicating the git commit, but
+currently does not require or use git tags at all.

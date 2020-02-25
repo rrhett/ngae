@@ -5,11 +5,19 @@ const chalk = require('chalk');
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
 
-const clean = (dir) => {
+const clean = (config) => {
   const step = require('./status.js').status('Cleaning');
-  spawnSync('rm', ['-rf', path.join(dir, 'genfiles')]);
-  spawnSync('rm', ['-rf', path.join(dir, 'generated_content')]);
-  spawnSync('rm', ['-f', path.join(dir, '*pyc')]);
+  // Either way, the dist folder can be cleaned, as that is generated from
+  // compile.
+  spawnSync('rm', ['-rf', 'dist']);
+  if (config.firebase) {
+    // Nothing to do other than clean dist folder.
+  } else {
+    // Clean copied artifacts in the appengine folder.
+    spawnSync('rm', ['-rf', path.join(dir, 'genfiles')]);
+    spawnSync('rm', ['-rf', path.join(dir, 'generated_content')]);
+    spawnSync('rm', ['-f', path.join(dir, '*pyc')]);
+  }
   step.done();
 };
 
@@ -24,5 +32,5 @@ if (require.main === module) {
   program.parse(process.argv);
 
   const config = require('./config.js').config(program.config);
-  clean(config.dir);
+  clean(config);
 }

@@ -5,18 +5,19 @@ const chalk = require('chalk');
 const path = require('path');
 const spawn = require('child_process').spawn;
 
-const run = (dir, compile) => {
+const run = (config, compile) => {
   const step = require('./status.js').status('Running...');
 
   if (compile) {
-    require('./compile.js').compile(dir);
+    require('./compile.js').compile(config);
   }
 
-  // Run dev_appserver.py from the appengine directory.
-  const appengine = spawn('dev_appserver.py', ['./'], {cwd: dir});
+  const serve = config.firebase
+    ? spawn('firebase', ['emulators:start'])
+    : spawn('dev_appserver.py', ['./'], {cwd: dir});
 
-  appengine.stdout.on('data', (data) => { console.log(data.toString().trim()); });
-  appengine.stderr.on('data', (data) => { console.error(data.toString().trim()); });
+  serve.stdout.on('data', (data) => { console.log(data.toString().trim()); });
+  serve.stderr.on('data', (data) => { console.error(data.toString().trim()); });
 
   step.done();
 };
@@ -33,5 +34,5 @@ if (require.main == module) {
   program.parse(process.argv);
 
   const config = require('./config.js').config(program.config);
-  run(config.dir, program.compile);
+  run(config, program.compile);
 }

@@ -4,25 +4,34 @@
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
 
-const compile = (dir) => {
-  require('./clean').clean(dir);
+const compile = (config) => {
+  require('./clean').clean(config);
 
   const step = require('./status.js').status('Compiling');
 
-  const compileStep = spawnSync('ng', ['build', '--prod', '--deployUrl', '/gc/']);
+  const compileArgs = ['build', '--prod'];
+  if (!config.firebase) {
+    // appengine serves the compiled artifacts in a static path that isn't root
+    compileArgs.push('--deployUrl');
+    compileArgs.push('/gc/');
+  }
+  const compileStep = spawnSync('ng', compileArgs);
   if (compileStep.status !== 0) {
     step.error(compileStep.stderr.toString('utf8'));
   }
 
-  const genFilesDir = path.join(dir, 'genfiles');
-  const genContentDir = path.join(dir, 'generated_content');
-  const distDir = path.join(process.cwd(), 'dist');
+  if (!config.firebase) {
+    const dir = config.dir;
+    const genFilesDir = path.join(dir, 'genfiles');
+    const genContentDir = path.join(dir, 'generated_content');
+    const distDir = path.join(process.cwd(), 'dist');
 
-  spawnSync('mkdir', [genFilesDir]);
+    spawnSync('mkdir', [genFilesDir]);
 
-  spawnSync('cp', [path.join(distDir, 'index.html'), path.join(genFilesDir, 'index.html')]);
-  spawnSync('cp', ['-R', distDir, genContentDir]);
-  spawnSync('rm', ['-f', path.join(genContentDir, 'index.html')]);
+    spawnSync('cp', [path.join(distDir, 'index.html'), path.join(genFilesDir, 'index.html')]);
+    spawnSync('cp', ['-R', distDir, genContentDir]);
+    spawnSync('rm', ['-f', path.join(genContentDir, 'index.html')]);
+  }
 
   step.done();
 };
@@ -38,5 +47,5 @@ if (require.main == module) {
   program.parse(process.argv);
 
   const config = require('./config.js').config(program.config);
-  compile(config.dir);
+  compile(config);
 }

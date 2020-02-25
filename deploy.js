@@ -5,11 +5,7 @@ const execSync = require('child_process').execSync;
 const path = require('path');
 const spawnSync = require('child_process').spawnSync;
 
-const deploy = (dir, projectId) => {
-  require('./compile').compile(dir);
-
-  const step = require('./status.js').status('Deploying');
-
+const deployAppEngine = (config, step) => {
   const tag = spawnSync('git', ['tag', '-l', '--contains']).stdout.toString().trim();
 
   // We generate a version based on the git tag of the commit.
@@ -57,10 +53,41 @@ const deploy = (dir, projectId) => {
     execSync(
         `gcloud app deploy --version ${tag} --project ${projectId}`,
         {cwd: dir, stdio: [0, 1, 2]});
-    step.done();
   } catch (e) {
     step.error('');
   }
+};
+
+const deployFirebase = (config, step) => {
+  const hash = spawnSync('git', ['show', '--no-patch', '--format="%H"']).stdout.toString().trim();
+  // TODO: integrate tags from the commit into the deploy message.
+  //const tag = spawnSync('git', ['tag', '--contains']).stdout.toString().trim();
+
+  const deployMessage = `Deployed from commit ${hash}`;
+
+  console.log(`About to deploy from commit ${hash}.`);
+  try {
+    // stdio: [0, 1, 2] uses this process' stdio, effectively running this
+    // script inline.
+    execSync(
+        `firebase deploy -m "${deployMessage}"`,
+        {stdio: [0, 1, 2]});
+  } catch (e) {
+    step.error('');
+  }
+};
+
+const deploy = (config) => {
+  require('./compile').compile(config);
+
+  const step = require('./status.js').status('Deploying');
+
+  if (config.firebase) {
+    deployFirebase(config, step);
+  } else {
+    deployAppEngine(config, step);
+  }
+  step.done();
 };
 
 exports.deploy = deploy;
@@ -74,5 +101,5 @@ if (require.main == module) {
   program.parse(process.argv);
 
   const config = require('./config.js').config(program.config);
-  deploy(config.dir, config.projectId);
+  deploy(config);
 }

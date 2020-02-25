@@ -8,6 +8,6 @@ program
     .version(pkg.version)
     .command('clean', 'Cleans up generated content')
     .command('compile', 'Does a production build of the client')
-    .command('deploy', 'Deploys to appengine')
-    .command('run', 'Runs the dev appengine server')
+    .command('deploy', 'Deploys to production')
+    .command('run', 'Runs the project locally')
     .parse(process.argv);
